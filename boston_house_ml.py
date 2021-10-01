@@ -55,3 +55,37 @@ def user_input_features():
 
 
 df = user_input_features()
+
+
+# Main Panel
+
+# Print specified input parameters
+st.header('Specified Input Parameters')
+st.write(df)
+st.write('---')
+
+#Build and regression model
+model = RandomForestRegressor()
+model.fit(X, Y)
+
+# Apply model to prediction
+prediction = model.predict(df)
+
+st.header('Prediction of MEDV')
+st.write(prediction)
+st.write('---')
+
+# Explaining the model's predictions using SHAP values
+explainer = shap.TreeExplainer(model)
+shap_values = explainer.shap_values(X)
+
+st.header('Feature Importance')
+plt.title('Feature Importance based on SHAP values')
+shap.summary_plot(shap_values, X)
+st.pyplot(plt.gcf(), bbox_inches='tight')
+st.write('---')
+
+plt.clf()
+plt.title('Feature importance based on SHAP values (Bar)')
+shap.summary_plot(shap_values, X, plot_type = "bar")
+st.pyplot(plt.gcf(), bbox_inches = 'tight')
