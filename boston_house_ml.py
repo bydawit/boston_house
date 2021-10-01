@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import shap
+import pickle
 import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.ensemble import RandomForestRegressor
@@ -16,10 +17,10 @@ boston = datasets.load_boston()
 X = pd.DataFrame(boston.data, columns=boston.feature_names)
 Y = pd.DataFrame(boston.target, columns=["MEDV"])
 
+
 # Sidebar
 # Header of Specify Input Parameters
 st.sidebar.header('Specify Input Parameters')
-
 
 def user_input_features():
     CRIM = st.sidebar.slider('CRIM', float(X.CRIM.min()), float(X.CRIM.max()), float(X.CRIM.mean()))
@@ -56,7 +57,6 @@ def user_input_features():
 
 df = user_input_features()
 
-
 # Main Panel
 
 # Print specified input parameters
@@ -65,8 +65,7 @@ st.write(df)
 st.write('---')
 
 #Build and regression model
-model = RandomForestRegressor()
-model.fit(X, Y)
+model = pickle.load(open('boston_house_clf.pkl', 'rb'))
 
 # Apply model to prediction
 prediction = model.predict(df)
